@@ -136,6 +136,14 @@
     <Compile Include="Migrations\202108091436372_InitialMigration.designer.cs">
       <DependentUpon>202108091436372_InitialMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202108091607546_DataAnnotationsForID.cs" />
+    <Compile Include="Migrations\202108091607546_DataAnnotationsForID.designer.cs">
+      <DependentUpon>202108091607546_DataAnnotationsForID.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202108091714256_ChangeGuestModel.cs" />
+    <Compile Include="Migrations\202108091714256_ChangeGuestModel.designer.cs">
+      <DependentUpon>202108091714256_ChangeGuestModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\DataContext.cs" />
     <Compile Include="Models\Guest.cs" />
@@ -159,6 +167,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202108091436372_InitialMigration.resx">
       <DependentUpon>202108091436372_InitialMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202108091607546_DataAnnotationsForID.resx">
+      <DependentUpon>202108091607546_DataAnnotationsForID.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202108091714256_ChangeGuestModel.resx">
+      <DependentUpon>202108091714256_ChangeGuestModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

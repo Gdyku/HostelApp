@@ -47,3 +47,5 @@ C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\bin\System.Web.H
 C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\bin\System.Web.Http.WebHost.xml
 C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\obj\Debug\ClientService.Migrations.InitialMigration.resources
 C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\obj\Debug\ClientService.csproj.GenerateResource.Cache
+C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\obj\Debug\ClientService.Migrations.DataAnnotationsForID.resources
+C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\obj\Debug\ClientService.Migrations.ChangeGuestModel.resources

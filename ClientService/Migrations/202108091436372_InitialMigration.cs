@@ -48,7 +48,7 @@
                 .ForeignKey("dbo.Guests", t => t.Guest_ID, cascadeDelete: true)
                 .Index(t => t.Reservation_ID)
                 .Index(t => t.Guest_ID);
-            
+
         }
         
         public override void Down()
