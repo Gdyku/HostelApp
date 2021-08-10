@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using AutoMapper;
 using ClientService.Mapper;
+using System.Web.Http;
 
 namespace ClientService
 {
@@ -10,6 +11,7 @@ namespace ClientService
     {
         protected void Application_Start()
         {
+            GlobalConfiguration.Configure(WebApiConfig.Register);
             var config = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<MappingProfile>();

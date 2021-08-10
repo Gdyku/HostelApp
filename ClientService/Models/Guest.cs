@@ -9,9 +9,7 @@ namespace ClientService.Models
 {
     public class Guest
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Key]
-        public Guid ID { get; set; }
+        public long ID { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]

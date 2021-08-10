@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -8,7 +9,7 @@ namespace ClientService.DtoModels
 {
     public class ReservationDTO
     {
-        public Guid ID { get; set; }
+        public long ID { get; set; }
         public int ReservationCode { get; set; }
         public decimal Price { get; set; }
         public DateTime DateOfCreate { get; set; }

@@ -9,9 +9,7 @@ namespace ClientService.Models
 {
     public class Reservation
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Key]
-        public Guid ID { get; set; }
+        public long ID { get; set; }
         public int ReservationCode { get; set; }
         public decimal Price { get; set; }
         public DateTime DateOfCreate { get; set; }
