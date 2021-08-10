@@ -7,35 +7,37 @@ using ClientService.DtoModels;
 using ClientService.Models;
 using System.Data.Entity;
 using AutoMapper;
+using System.Net;
+using System.Linq;
 
 namespace ClientService.Controllers.ApiControllers
 {
     public class ReservationController : ApiController
     {
-        private readonly ReservationLogic _logic;
         private readonly DataContext _context;
-        private readonly IMapper _mapper;
-        public ReservationController(IMapper mapper)
+        public ReservationController()
         {
             _context = new DataContext();
-            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<List<ReservationDTO>> GetReservationsAsync()
+        public async Task<List<Reservation>> GetReservationsAsync()
         {
-            var reservations = await _context.Reservations.ToListAsync();
-            var mappedReservations = _mapper.Map<List<Reservation>, List<ReservationDTO>>(reservations);
+            return await _context.Reservations.ToListAsync();
 
-            return mappedReservations;
         }
 
         [HttpGet]
-        public async Task<ReservationDTO> GetReservationAsync(long Id)
+        public async Task<Reservation> GetReservationAsync(long Id)
         {
             try
             {
-                return await _logic.GetReservation(Id);
+                var reservation = await _context.Reservations.FirstOrDefaultAsync(g => g.ID == Id);
+
+                if (reservation == null)
+                    throw new Exception("This guest cannot be find");
+
+                return reservation;
             }
             catch (Exception)
             {
@@ -44,23 +46,38 @@ namespace ClientService.Controllers.ApiControllers
         }
 
         [HttpPost]
-        public async Task CreateReservationAsync(ReservationDTO reservation)
+        public Reservation CreateReservationAsync(Reservation reservation)
         {
-            await _logic.CreateReservation(reservation);
+            if (!ModelState.IsValid)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
+            _context.Reservations.Add(reservation);
+            _context.SaveChanges();
+
+            return reservation;
         }
 
         [HttpPut]
-        public async Task EditReservationAsync(ReservationDTO reservation)
+        public void EditReservationAsync(Reservation editedReservation)
         {
-            try
-            {
-                await _logic.EditReservation(reservation);
-            }
-            catch (Exception)
-            {
+            if (!ModelState.IsValid)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-                throw;
-            }
+            var reservation = _context.Reservations.FirstOrDefault(r => r.ID == editedReservation.ID);
+
+            if (reservation == null)
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+
+            reservation.ReservationCode = editedReservation.ReservationCode;
+            reservation.Price = editedReservation.Price;
+            reservation.DateOfCreate = editedReservation.DateOfCreate;
+            reservation.CheckInDate = editedReservation.CheckInDate;
+            reservation.CheckOutDate = editedReservation.CheckOutDate;
+            reservation.Currency = editedReservation.Currency;
+            reservation.Provision = editedReservation.Provision ?? reservation.Provision;
+            reservation.Source = editedReservation.Source ?? reservation.Source;
+
+            _context.SaveChanges();
         }
 
         [HttpDelete]
@@ -68,11 +85,16 @@ namespace ClientService.Controllers.ApiControllers
         {
             try
             {
-                await _logic.RemoveReservation(Id);
+                var reservation = await _context.Reservations.FirstOrDefaultAsync(g => g.ID == Id);
+
+                if (reservation == null)
+                    throw new Exception("This guest cannot be find");
+
+                _context.Reservations.Remove(reservation);
+                await _context.SaveChangesAsync();
             }
             catch (Exception)
             {
-
                 throw;
             }
         }

@@ -66,3 +66,7 @@ C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\bin\roslyn\vbc.r
 C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\obj\Debug\ClientService.Migrations.InitialMigration.resources
 C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\obj\Debug\ClientService.csproj.GenerateResource.Cache
 C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\obj\Debug\ClientService.Migrations.PopulateDatabase.resources
+C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\bin\AutoMapper.EF6.dll
+C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\bin\DelegateDecompiler.dll
+C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\bin\DelegateDecompiler.EntityFramework.dll
+C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\bin\Mono.Reflection.dll

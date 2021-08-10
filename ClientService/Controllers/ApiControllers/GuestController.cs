@@ -21,13 +21,16 @@ namespace ClientService.Controllers.ApiControllers
         }
 
         [HttpGet]
-        public async Task<List<Guest>> GetGuestsAsync()
+        public async Task<List<GuestDTO>> GetGuestsAsync()
         {
-            return await _context.Guests.ToListAsync();
+            var guests = await _context.Guests.ToListAsync();
+            var guestsDto = AutoMapper.Mapper.Map<List<GuestDTO>>(guests);
+
+            return guestsDto;
         }
 
         [HttpGet]
-        public async Task<Guest> GetGuestAsync(long Id)
+        public async Task<GuestDTO> GetGuestAsync(long Id)
         {
             try
             {
@@ -36,7 +39,9 @@ namespace ClientService.Controllers.ApiControllers
                 if(guest == null)
                     throw new Exception("This guest cannot be find");
 
-                return guest;
+                var guestDto = AutoMapper.Mapper.Map<GuestDTO>(guest);
+
+                return guestDto;
             }
             catch (Exception)
             {
@@ -45,38 +50,38 @@ namespace ClientService.Controllers.ApiControllers
         }
 
         [HttpPost]
-        public Guest CreateGuest(Guest guest)
+        public async Task CreateGuest(GuestDTO guestDto)
         {
             if (!ModelState.IsValid)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-            _context.Guests.Add(guest);
-            _context.SaveChanges();
+            var guest = AutoMapper.Mapper.Map<Guest>(guestDto);
 
-            return guest;
+            _context.Guests.Add(guest);
+            await _context.SaveChangesAsync();
         }
 
         [HttpPut]
-        public void EditGuestAsync(Guest editedGuest)
+        public async Task EditGuestAsync(GuestDTO guestDto)
         {
             if (!ModelState.IsValid)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-            var guest = _context.Guests.FirstOrDefault(g => g.ID == editedGuest.ID);
+            var guest = await _context.Guests.FirstOrDefaultAsync(g => g.ID == guestDto.ID);
 
             if (guest == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
-            guest.Name = editedGuest.Name;
-            guest.Surname = editedGuest.Surname;
-            guest.Email = editedGuest.Email;
-            guest.BirthDate = editedGuest.BirthDate ?? guest.BirthDate;
-            guest.PostalCode = editedGuest.PostalCode ?? guest.PostalCode;
-            guest.PhoneNumber = editedGuest.PhoneNumber ?? guest.PhoneNumber;
-            guest.Address = editedGuest.Address ?? guest.Address;
-            guest.City = editedGuest.City ?? guest.City;
+            guest.Name = guestDto.Name;
+            guest.Surname = guestDto.Surname;
+            guest.Email = guestDto.Email;
+            guest.BirthDate = guestDto.BirthDate ?? guest.BirthDate;
+            guest.PostalCode = guestDto.PostalCode ?? guest.PostalCode;
+            guest.PhoneNumber = guestDto.PhoneNumber ?? guest.PhoneNumber;
+            guest.Address = guestDto.Address ?? guest.Address;
+            guest.City = guestDto.City ?? guest.City;
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
         [HttpDelete]

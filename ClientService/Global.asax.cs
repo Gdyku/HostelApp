@@ -4,6 +4,8 @@ using System.Web.Routing;
 using AutoMapper;
 using ClientService.Mapper;
 using System.Web.Http;
+using ClientService.Models;
+using ClientService.DtoModels;
 
 namespace ClientService
 {
@@ -12,13 +14,9 @@ namespace ClientService
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
-            var config = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<MappingProfile>();
-            });
-            var mapper = config.CreateMapper();
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+            AutoMapper.Mapper.Initialize(cfg => cfg.AddProfile<MappingProfile>());           
         }
     }
 }
