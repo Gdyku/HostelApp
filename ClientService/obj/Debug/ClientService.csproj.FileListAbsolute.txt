@@ -70,3 +70,9 @@ C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\bin\AutoMapper.E
 C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\bin\DelegateDecompiler.dll
 C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\bin\DelegateDecompiler.EntityFramework.dll
 C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\bin\Mono.Reflection.dll
+C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\bin\Antlr3.Runtime.dll
+C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\bin\System.Web.Optimization.dll
+C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\bin\WebGrease.dll
+C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\bin\Antlr3.Runtime.pdb
+C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\bin\System.Web.Optimization.xml
+C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\obj\Debug\ClientService.Migrations.PopulateReservations.resources

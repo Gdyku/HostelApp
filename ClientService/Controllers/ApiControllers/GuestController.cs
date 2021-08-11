@@ -49,6 +49,15 @@ namespace ClientService.Controllers.ApiControllers
             }
         }
 
+        [HttpGet]
+        public async Task<List<GuestDTO>> GetSpecificGuests()
+        {
+            var guests = await _context.Guests.Where(g => g.Name == "Piotr" || g.City == "Wrocław" || g.City == null).ToListAsync();
+            var guestsDto = AutoMapper.Mapper.Map<List<GuestDTO>>(guests);
+
+            return guestsDto;
+        }
+
         [HttpPost]
         public async Task CreateGuest(GuestDTO guestDto)
         {

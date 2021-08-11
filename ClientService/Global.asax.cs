@@ -6,6 +6,7 @@ using ClientService.Mapper;
 using System.Web.Http;
 using ClientService.Models;
 using ClientService.DtoModels;
+using System.Web.Optimization;
 
 namespace ClientService
 {
@@ -16,6 +17,7 @@ namespace ClientService
             GlobalConfiguration.Configure(WebApiConfig.Register);
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
             AutoMapper.Mapper.Initialize(cfg => cfg.AddProfile<MappingProfile>());           
         }
     }
