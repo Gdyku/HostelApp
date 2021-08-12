@@ -1,11 +1,11 @@
 ﻿@model IEnumerable<ClientService.DtoModels.ReservationDTO>
 
 @{
-    ViewBag.Title = "ReservationsList";
+    ViewBag.Title = "TestList";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>ReservationsList</h2>
+<h2>TestList</h2>
 <table id="reservations" class="table table-bordered table-hover">
     <thead>
         <tr>
@@ -18,98 +18,54 @@
             <th>Delete</th>
         </tr>
     </thead>
-    <tbody>
-        @foreach(var reservation in Model)
-        {
-            <tr>
-                <td>@reservation.ReservationCode</td>
-                <td>@reservation.Price</td>
-                <td>@reservation.DateOfCreate</td>
-                <td>@reservation.CheckInDate</td>
-                <td>@reservation.CheckOutDate</td>
-                <td>@reservation.Currency</td>
-                <td>
-                    <button data-reservation-id="@reservation.ID" class="btn-link js-delete">Delete</button>
-                </td>
-            </tr>
-        }
-    </tbody>
+    <tbody class="tbody"></tbody>
 </table>
 
 @section scripts{
     <script>
         $(document).ready(function () {
-            /*$("#reservations").ajax({
-                url: "/api/reservation/getreservationsasync/",
+            loadData();
+        });
+
+        function loadData() {
+            $.ajax({
+                url: "/api/reservation/getreservationsasync",
                 method: "GET",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
                 success: function (result) {
-                    var html = "";
-                    $.each(result, function (item) {
-                        html += "<tr";
-                        html += "<td>" + item.ReservationCode + "</td>";
-                        html += "<td>" + item.Price + "</td>";
-                        html += "<td>" + item.DateOfCreate + "</td>";
-                        html += "<td>" + item.CheckInDate + "</td>";
-                        html += "<td>" + item.CheckOutDate + "</td>";
-                        html += "<td>" + item.Currency + "</td>";
-                        html += "<td>Delete</td>";
-                        html += "></tr>";
+                    var html = '';
+                    $.each(result, function (key, item) {
+                        html += '<tr>';
+                        html += '<td>' + item.ReservationCode + '</td>';
+                        html += '<td>' + item.Price + '</td>';
+                        html += '<td>' + item.DateOfCreate + '</td>';
+                        html += '<td>' + item.CheckInDate + '</td>';
+                        html += '<td>' + item.CheckOutDate + '</td>';
+                        html += '<td>' + item.Currency + '</td>';
+                        html += '<td><button onclick="Delete(' + item.ID + ')" class="btn-link js-delete">Delete</button><td>';
+                        html += '</tr>';
                     });
-                    $("tbody").html(html);
-                }
-            });*/
-
-           /* $("#reservations").DataTable({
-                ajax: {
-                    url: "/api/reservation/getreservationsasync/",
-                    dataSrc: ""
+                    $('.tbody').html(html);
                 },
-                columns: [
-                    {
-                        data: "reservationCode",
-                        render: function(data, reservation){
-                            return "<td>" + reservation.reservationCode + "</td>";
-                        }
-                    },
-                    {
-                        data: "Price"
-                    },
-                    {
-                        data: "DateOfCreate"
-                    },
-                    {
-                        data: "CheckInDate"
-                    },
-                    {
-                        data: "CheckOutDate"
-                    },
-                    {
-                        data: "Currency"
-                    },
-                    {
-                        data: "ID",
-                        render: function (data) {
-                            return "<button class='btn-link js-delete' data-reservation-id=" + data + ">Delete</button>";
-                        }
-                    }
-                ]
-            });*/
-
-            $("#reservations").on("click", ".js-delete" ,function () {
-                var button = $(this);
-
-                if (confirm("Are you sure")) {
-                    $.ajax({
-                        url: "/api/reservation/deletereservationasync/" + button.attr("data-reservation-id"),
-                        method: "DELETE",
-                        success: function () {
-                            button.parents("tr").remove();
-                        }
-                    });
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
                 }
             });
-        });
-    </script>    
+        }
+        
+        function Delete(ID) {
+            var button = $(this);
+            if (confirm("Are you sure you want to delete this record?")) {
+                $.ajax({
+                    url: "/api/reservation/deletereservationasync/" + ID,
+                    method: "DELETE",
+                    success: function () {
+                        button.parents('tr').remove();
+                    }
+                });
+            }
+        }
+        
+    </script>
 }
-
-

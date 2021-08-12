@@ -12,6 +12,7 @@ namespace ClientService.Models
         public long ID { get; set; }
         public int ReservationCode { get; set; }
         public decimal Price { get; set; }
+        [DataType(DataType.Date)]
         public DateTime DateOfCreate { get; set; }
         public DateTime CheckInDate { get; set; }
         public DateTime CheckOutDate { get; set; }

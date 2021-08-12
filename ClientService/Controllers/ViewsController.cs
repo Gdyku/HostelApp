@@ -26,5 +26,13 @@ namespace ClientService.Controllers
 
             return View(reservationsDto);
         }
+
+        public async Task<ActionResult> GuestsList()
+        {
+            var guests = await _context.Guests.Where(g => g.Name == "Piotr" || g.City == "Wrocław" || g.City == null).ToListAsync();
+            var guestsDto = AutoMapper.Mapper.Map<List<GuestDTO>>(guests);
+
+            return View(guestsDto);
+        }
     }
 }

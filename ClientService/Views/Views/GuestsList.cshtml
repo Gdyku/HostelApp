@@ -1,0 +1,57 @@
+﻿@model IEnumerable<ClientService.DtoModels.GuestDTO>
+
+@{
+    ViewBag.Title = "GuestsList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>GuestsList</h2>
+<table id="guests" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Email</th>
+            <th>City</th>
+        </tr>
+    </thead>
+    <tbody class="tbody"></tbody>
+</table>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            loadData();
+        });
+
+        function loadData() {
+            $.ajax({
+                url: "/api/guest/getguestsasync",
+                method: "GET",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    var html = '';
+                    $.each(result, function (key, item) {
+                        html += '<tr>';
+                        html += '<td>' + item.Name + '</td>';
+                        html += '<td>' + item.Surname + '</td>';
+                        html += '<td>' + item.Email + '</td>';
+                        if (item.City == null)
+                        {
+                            html += '<td></td>';
+                        }
+                        else {
+                            html += '<td>' + item.City + '</td>';
+                        }
+                    });
+                    $('.tbody').html(html);
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
+
+    </script>
+}
