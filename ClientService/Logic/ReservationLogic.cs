@@ -7,25 +7,24 @@ using ClientService.Models;
 using System.Threading.Tasks;
 using ClientService.DtoModels;
 using System.Data.Entity;
+using ClientService.Interface;
 
 namespace ClientService.Logic
 {
-    public class ReservationLogic
+    public class ReservationLogic : IReservationLogic
     {
-        private readonly IMapper _mapper;
         private readonly DataContext _context;
-        public ReservationLogic(DataContext context, IMapper mapper)
+        public ReservationLogic()
         {
-            _context = context;
-            _mapper = mapper;
+            _context = new DataContext();
         } 
 
         public async Task<List<ReservationDTO>> GetReservations()
         {
             var reservations = await _context.Reservations.ToListAsync();
-            var mappedReservations = _mapper.Map<List<Reservation>, List<ReservationDTO>>(reservations);
+            var reservationsDto = AutoMapper.Mapper.Map<List<ReservationDTO>>(reservations);
 
-            return mappedReservations;
+            return reservationsDto;
         }
 
         public async Task<ReservationDTO> GetReservation(long Id)
@@ -35,34 +34,36 @@ namespace ClientService.Logic
             if (reservation == null)
                 throw new Exception("This guest cannot be find");
 
-            var mappedReservation = _mapper.Map<Reservation, ReservationDTO>(reservation);
+            var reservationDto = AutoMapper.Mapper.Map<ReservationDTO>(reservation);
 
-            return mappedReservation;
+            return reservationDto;
         }
 
-        public async Task CreateReservation(ReservationDTO reservation)
+        public async Task CreateReservation(ReservationDTO reservationDto)
         {
-            var mappedReservation = _mapper.Map<ReservationDTO, Reservation>(reservation);
+            var reservation = AutoMapper.Mapper.Map<Reservation>(reservationDto);
 
-            _context.Reservations.Add(mappedReservation);
+            _context.Reservations.Add(reservation);
             await _context.SaveChangesAsync();
         }
 
-        public async Task EditReservation(ReservationDTO editedReservation)
+        public async Task EditReservation(ReservationDTO reservationDto)
         {
-            var reservation = await _context.Reservations.FirstOrDefaultAsync(r => r.ID == editedReservation.ID);
+            var reservation = await _context.Reservations.FirstOrDefaultAsync(r => r.ID == reservationDto.ID);
 
             if (reservation == null)
                 throw new Exception("This guest cannot be find");
 
-            reservation.ReservationCode = editedReservation.ReservationCode;
-            reservation.Price = editedReservation.Price;
-            reservation.DateOfCreate = editedReservation.DateOfCreate;
-            reservation.CheckInDate = editedReservation.CheckInDate;
-            reservation.CheckOutDate = editedReservation.CheckOutDate;
-            reservation.Currency = editedReservation.Currency;
-            reservation.Provision = editedReservation.Provision ?? reservation.Provision;
-            reservation.Source = editedReservation.Source ?? reservation.Source;
+            reservation.ReservationCode = reservationDto.ReservationCode;
+            reservation.Price = reservationDto.Price;
+            reservation.DateOfCreate = reservationDto.DateOfCreate;
+            reservation.CheckInDate = reservationDto.CheckInDate;
+            reservation.CheckOutDate = reservationDto.CheckOutDate;
+            reservation.Currency = reservationDto.Currency;
+            reservation.Provision = reservationDto.Provision ?? reservation.Provision;
+            reservation.Source = reservationDto.Source ?? reservation.Source;
+
+            await _context.SaveChangesAsync();
         }
 
         public async Task RemoveReservation(long Id)

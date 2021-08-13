@@ -9,24 +9,22 @@ using System.Data.Entity;
 using AutoMapper;
 using System.Net;
 using System.Linq;
+using ClientService.Interface;
 
 namespace ClientService.Controllers.ApiControllers
 {
     public class ReservationController : ApiController
     {
-        private readonly DataContext _context;
+        private readonly IReservationLogic _logic;
         public ReservationController()
         {
-            _context = new DataContext();
+            _logic = new ReservationLogic();
         }
 
         [HttpGet]
         public async Task<List<ReservationDTO>> GetReservationsAsync()
         {
-            var reservations = await _context.Reservations.ToListAsync();
-            var reservationsDto = AutoMapper.Mapper.Map<List<ReservationDTO>>(reservations);
-
-            return reservationsDto;
+            return await _logic.GetReservations();
         }
 
         [HttpGet]
@@ -34,14 +32,7 @@ namespace ClientService.Controllers.ApiControllers
         {
             try
             {
-                var reservation = await _context.Reservations.FirstOrDefaultAsync(g => g.ID == Id);
-
-                if (reservation == null)
-                    throw new Exception("This guest cannot be find");
-
-                var reservationDto = AutoMapper.Mapper.Map<ReservationDTO>(reservation);
-
-                return reservationDto;
+                return await _logic.GetReservation(Id);
             }
             catch (Exception)
             {
@@ -50,38 +41,23 @@ namespace ClientService.Controllers.ApiControllers
         }
 
         [HttpPost]
-        public async Task CreateReservationAsync(ReservationDTO reservationDto)
+        public async Task<IHttpActionResult> CreateReservationAsync(ReservationDTO reservationDto)
         {
             if (!ModelState.IsValid)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-            var reservation = AutoMapper.Mapper.Map<Reservation>(reservationDto);
-
-            _context.Reservations.Add(reservation);
-            await _context.SaveChangesAsync();
+            await _logic.CreateReservation(reservationDto);
+            return Ok();
         }
 
         [HttpPut]
-        public async Task EditReservationAsync(ReservationDTO reservationDto)
+        public async Task<IHttpActionResult> EditReservationAsync(ReservationDTO reservationDto)
         {
             if (!ModelState.IsValid)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-            var reservation = await _context.Reservations.FirstOrDefaultAsync(r => r.ID == reservationDto.ID);
-
-            if (reservation == null)
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-
-            reservation.ReservationCode = reservationDto.ReservationCode;
-            reservation.Price = reservationDto.Price;
-            reservation.DateOfCreate = reservationDto.DateOfCreate;
-            reservation.CheckInDate = reservationDto.CheckInDate;
-            reservation.CheckOutDate = reservationDto.CheckOutDate;
-            reservation.Currency = reservationDto.Currency;
-            reservation.Provision = reservationDto.Provision ?? reservation.Provision;
-            reservation.Source = reservationDto.Source ?? reservation.Source;
-
-            await _context.SaveChangesAsync();
+            await _logic.EditReservation(reservationDto);
+            return Ok();
         }
 
         [HttpDelete]
@@ -89,13 +65,7 @@ namespace ClientService.Controllers.ApiControllers
         {
             try
             {
-                var reservation = await _context.Reservations.FirstOrDefaultAsync(g => g.ID == Id);
-
-                if (reservation == null)
-                    throw new Exception("This guest cannot be find");
-
-                _context.Reservations.Remove(reservation);
-                await _context.SaveChangesAsync();
+                await _logic.RemoveReservation(Id);
             }
             catch (Exception)
             {

@@ -9,24 +9,23 @@ using System.Data.Entity;
 using AutoMapper;
 using System.Net;
 using System.Linq;
+using ClientService.Interface;
 
 namespace ClientService.Controllers.ApiControllers
 {
+    //Route: api/controller/action/id
     public class GuestController : ApiController
     {
-        private readonly DataContext _context;
+        private readonly IGuestLogic _logic;
         public GuestController()
         { 
-            _context = new DataContext();
+            _logic = new GuestLogic();
         }
 
         [HttpGet]
         public async Task<List<GuestDTO>> GetGuestsAsync()
         {
-            var guests = await _context.Guests.ToListAsync();
-            var guestsDto = AutoMapper.Mapper.Map<List<GuestDTO>>(guests);
-
-            return guestsDto;
+            return await _logic.GetGuests();
         }
 
         [HttpGet]
@@ -34,14 +33,7 @@ namespace ClientService.Controllers.ApiControllers
         {
             try
             {
-                var guest = await _context.Guests.FirstOrDefaultAsync(g => g.ID == Id);
-
-                if(guest == null)
-                    throw new Exception("This guest cannot be find");
-
-                var guestDto = AutoMapper.Mapper.Map<GuestDTO>(guest);
-
-                return guestDto;
+                return await _logic.GetGuest(Id);
             }
             catch (Exception)
             {
@@ -52,45 +44,27 @@ namespace ClientService.Controllers.ApiControllers
         [HttpGet]
         public async Task<List<GuestDTO>> GetSpecificGuests()
         {
-            var guests = await _context.Guests.Where(g => g.Name == "Piotr" || g.City == "Wrocław" || g.City == null).ToListAsync();
-            var guestsDto = AutoMapper.Mapper.Map<List<GuestDTO>>(guests);
-
-            return guestsDto;
+            return await _logic.GetSpecificGuests();
         }
 
         [HttpPost]
-        public async Task CreateGuest(GuestDTO guestDto)
+        public async Task<IHttpActionResult> CreateGuest(GuestDTO guestDto)
         {
             if (!ModelState.IsValid)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-            var guest = AutoMapper.Mapper.Map<Guest>(guestDto);
-
-            _context.Guests.Add(guest);
-            await _context.SaveChangesAsync();
+            await _logic.CreateGuest(guestDto);
+            return Ok();
         }
 
         [HttpPut]
-        public async Task EditGuestAsync(GuestDTO guestDto)
+        public async Task<IHttpActionResult> EditGuestAsync(GuestDTO guestDto)
         {
             if (!ModelState.IsValid)
                 throw new HttpResponseException(HttpStatusCode.BadRequest);
 
-            var guest = await _context.Guests.FirstOrDefaultAsync(g => g.ID == guestDto.ID);
-
-            if (guest == null)
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-
-            guest.Name = guestDto.Name;
-            guest.Surname = guestDto.Surname;
-            guest.Email = guestDto.Email;
-            guest.BirthDate = guestDto.BirthDate ?? guest.BirthDate;
-            guest.PostalCode = guestDto.PostalCode ?? guest.PostalCode;
-            guest.PhoneNumber = guestDto.PhoneNumber ?? guest.PhoneNumber;
-            guest.Address = guestDto.Address ?? guest.Address;
-            guest.City = guestDto.City ?? guest.City;
-
-            await _context.SaveChangesAsync();
+            await _logic.EditGuest(guestDto);
+            return Ok();
         }
 
         [HttpDelete]
@@ -98,14 +72,7 @@ namespace ClientService.Controllers.ApiControllers
         {
             try
             {
-                var guest = await _context.Guests.FirstOrDefaultAsync(g => g.ID == Id);
-
-                if (guest == null)
-                    throw new Exception("This guest cannot be find");
-
-                _context.Guests.Remove(guest);
-                await _context.SaveChangesAsync();
-
+                await _logic.DeleteGuest(Id);
             }
             catch (Exception)
             { 

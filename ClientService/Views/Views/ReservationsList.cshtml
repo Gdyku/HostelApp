@@ -11,9 +11,9 @@
         <tr>
             <th>Reservation Code</th>
             <th>Price</th>
-            <th>DateOfCreate</th>
-            <th>CheckInDate</th>
-            <th>CheckOutDate</th>
+            <th>Date Of Create</th>
+            <th>Check In Date</th>
+            <th>Check Out Date</th>
             <th>Currency</th>
             <th>Delete</th>
         </tr>
@@ -62,6 +62,7 @@
                     method: "DELETE",
                     success: function () {
                         button.parents('tr').remove();
+                        loadData();
                     }
                 });
             }

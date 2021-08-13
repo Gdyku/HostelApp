@@ -83,3 +83,10 @@ C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\bin\Ext.Net.xml
 C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\bin\Ext.Net.Utilities.xml
 C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\bin\Transformer.NET.xml
 C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\obj\Debug\ClientService.Migrations.PopulateReservations.resources
+C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\bin\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\bin\Unity.Abstractions.dll
+C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\bin\Unity.Container.dll
+C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\bin\Unity.Mvc5.dll
+C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\bin\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\bin\Unity.Abstractions.pdb
+C:\Users\Gdyku\Desktop\HostelSystem\ClientService\ClientService\bin\Unity.Container.pdb

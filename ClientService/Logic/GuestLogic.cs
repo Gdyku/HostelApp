@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ClientService.DtoModels;
+using ClientService.Interface;
 using ClientService.Models;
 using System;
 using System.Collections.Generic;
@@ -10,22 +11,20 @@ using System.Web;
 
 namespace ClientService.Logic
 {
-    public class GuestLogic
+    public class GuestLogic : IGuestLogic
     {
-        private readonly IMapper _mapper;
         private readonly DataContext _context;
-        public GuestLogic(DataContext context, IMapper mapper)
+        public GuestLogic()
         {
-            _context = context;
-            _mapper = mapper;
+            _context = new DataContext();
         }
 
         public async Task<List<GuestDTO>> GetGuests()
         {
             var guests = await _context.Guests.ToListAsync();
-            var mappedGuests = _mapper.Map<List<Guest>, List<GuestDTO>>(guests);
+            var guestsDto = AutoMapper.Mapper.Map<List<GuestDTO>>(guests);
 
-            return mappedGuests;
+            return guestsDto;
         }
 
         public async Task<GuestDTO> GetGuest(long Id)
@@ -35,34 +34,34 @@ namespace ClientService.Logic
             if (guest == null)
                 throw new Exception("This guest cannot be find");
 
-            var mappedGuest = _mapper.Map<Guest, GuestDTO>(guest);
+            var guestDto = AutoMapper.Mapper.Map<GuestDTO>(guest);
 
-            return mappedGuest;
+            return guestDto;
         }
 
-        public async Task CreateGuest(GuestDTO guest)
+        public async Task CreateGuest(GuestDTO guestDto)
         {
-            var mappedGuest = _mapper.Map<GuestDTO, Guest>(guest);
+            var guest = AutoMapper.Mapper.Map<Guest>(guestDto);
 
-            _context.Guests.Add(mappedGuest);
+            _context.Guests.Add(guest);
             await _context.SaveChangesAsync();
         }
 
-        public async Task EditGuest(GuestDTO editedGuest)
+        public async Task EditGuest(GuestDTO guestDto)
         {
-            var guest = await _context.Guests.FirstOrDefaultAsync(g => g.ID == editedGuest.ID);
+            var guest = await _context.Guests.FirstOrDefaultAsync(g => g.ID == guestDto.ID);
 
             if (guest == null)
                 throw new Exception("Guest cannot be find");
 
-            guest.Name = editedGuest.Name;
-            guest.Surname = editedGuest.Surname;
-            guest.Email = editedGuest.Email;
-            guest.BirthDate = editedGuest.BirthDate ?? guest.BirthDate;
-            guest.PostalCode = editedGuest.PostalCode ?? guest.PostalCode;
-            guest.PhoneNumber = editedGuest.PhoneNumber ?? guest.PhoneNumber;
-            guest.Address = editedGuest.Address ?? guest.Address;
-            guest.City = editedGuest.City;
+            guest.Name = guestDto.Name;
+            guest.Surname = guestDto.Surname;
+            guest.Email = guestDto.Email;
+            guest.BirthDate = guestDto.BirthDate ?? guest.BirthDate;
+            guest.PostalCode = guestDto.PostalCode ?? guest.PostalCode;
+            guest.PhoneNumber = guestDto.PhoneNumber ?? guest.PhoneNumber;
+            guest.Address = guestDto.Address ?? guest.Address;
+            guest.City = guestDto.City;
 
             await _context.SaveChangesAsync();
         }
@@ -80,11 +79,11 @@ namespace ClientService.Logic
 
         public async Task<List<GuestDTO>> GetSpecificGuests()
         {
-            var guests = await _context.Guests.Where(g => g.Name == "Piotr" || g.City == "Wrocław" || g.City == null).ToListAsync(); 
+            var guests = await _context.Guests.Where(g => g.Name == "Piotr" || g.City == "Wrocław" || g.City == null).ToListAsync();
 
-            var mappedGuests = _mapper.Map<List<Guest>, List<GuestDTO>>(guests);
+            var guestsDto = AutoMapper.Mapper.Map<List<GuestDTO>>(guests);
 
-            return mappedGuests;
+            return guestsDto;
         }
     }
 }
